@@ -144,7 +144,7 @@ module.exports.create = async (req, res) => {
 // [POST] /admin/products/create
 module.exports.createPost = async (req, res) => { 
   req.body.price = parseInt(req.body.price);
-  req.body.discountPercentage = parseInt(req.body.discountPercentage);
+  req.body.discountPercentage = parseFloat(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
 
   if(req.body.position == '') {
@@ -153,13 +153,6 @@ module.exports.createPost = async (req, res) => {
   } else {
     req.body.position = parseInt(req.body.position);
   }
-
-  if(req.file) {
-    req.body.thumbnail = `/uploads/${req.file.filename}`
-  }
-  
-  // console.log(req.file);
-  // console.log(req.body);
   
   const product = new Product(req.body);
   await product.save();

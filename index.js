@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const database = require('./config/database');
 const route = require('./routes/client/index.route');
@@ -8,7 +9,6 @@ const methodOverride = require('method-override');
 const flash = require('express-flash');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-require('dotenv').config();
 
 
 // Connect database
