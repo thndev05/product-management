@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const path = require('path');
 const database = require('./config/database');
 const route = require('./routes/client/index.route');
 const routeAdmin = require('./routes/admin/index.route');
@@ -25,6 +26,9 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // Template engine
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'pug');
+
+// Tinymce
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
 
 // Flash
 app.use(cookieParser('KEYADJGFUQHEOD'));
