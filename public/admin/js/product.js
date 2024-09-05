@@ -1,5 +1,5 @@
 // Change status
-const btnsChangeStatus = document.querySelectorAll('[button-change-status');
+const btnsChangeStatus = document.querySelectorAll('[button-change-status]');
 if (btnsChangeStatus.length > 0) {
   const formChangeStatus = document.querySelector('#form-change-status');
   const path = formChangeStatus.getAttribute('data-path');
