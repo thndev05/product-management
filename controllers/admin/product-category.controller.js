@@ -65,3 +65,38 @@ module.exports.createPost = async (req, res) => {
 
   res.redirect(`${systemConfig.prefixAdmin}/products-category`); 
 }
+
+module.exports.edit = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const data = await ProductCategory.findOne({ 
+      _id: id,
+      deleted: false
+    });
+
+    const documents = await ProductCategory.find({
+      deleted: false
+    });
+
+    const newDocuments = createTreeHelper.tree(documents);
+
+    res.render('admin/pages/products-category/edit', {
+      pageTitle: 'Chỉnh sửa danh mục',
+      data: data,
+      documents: newDocuments
+    });
+  } catch (err) {
+    res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+  }
+}
+
+module.exports.editPatch = async (req, res) => {
+  const id = req.params.id;
+
+  req.body.position = parseInt(req.body.position);
+
+  await ProductCategory.updateOne({ _id: id }, req.body);
+  
+  res.redirect('back');
+}
