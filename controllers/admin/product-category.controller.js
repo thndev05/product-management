@@ -100,3 +100,43 @@ module.exports.editPatch = async (req, res) => {
   
   res.redirect('back');
 }
+
+// [DELETE] /admin/products-category/delete/:id
+module.exports.delete = async (req, res) => {
+  const id = req.params.id;
+
+  await ProductCategory.updateOne({ _id: id }, 
+    { 
+      deleted: true,
+      deletedAt: new Date()
+    }
+  );
+  
+  req.flash('success', 'Xoá thành công danh mục sản phẩm!')
+  res.redirect('back');
+}
+
+// [GET] /admin/products-category/detail/:id
+module.exports.detail = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const data = await ProductCategory.findOne({
+      _id: id,
+      deleted: false
+    });
+
+    if(data.parent_id) {
+      const parent = await ProductCategory.findById(data.parent_id);
+      data.parentTitle = parent.title;
+    }
+
+    res.render('admin/pages/products-category/detail', {
+      pageTitle: 'Chi tiết danh mục',
+      category: data
+    });
+  } catch (error) {
+    req.flash('error', 'Không có danh mục này');
+    res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+  }
+}

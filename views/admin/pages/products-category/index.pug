@@ -3,10 +3,12 @@ include ../../mixins/filterStatus.pug
 include ../../mixins/search.pug
 include ../../mixins/form-change-multi.pug
 include ../../mixins/table-tree.pug
-
+include ../../mixins/alert.pug
 
 
 block main
+  +alert-error(3000)
+  +alert-success(3000)
 
   h1 Danh mục sản phẩm
   .card.mb-3
@@ -48,5 +50,12 @@ block main
 
         tbody
           +table-tree(documents)
-  
+  form(
+    action=""
+    method="POST"
+    id="form-delete-category"
+    data-path=`${prefixAdmin}/products-category/delete`
+  )
+
+  script(src="/admin/js/category.js")
   script(src="/admin/js/script.js") 

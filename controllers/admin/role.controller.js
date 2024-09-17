@@ -90,3 +90,33 @@ module.exports.permissionsPatch = async (req, res) => {
   req.flash('success', 'Cập nhật phân quyền thành công');
   res.redirect('back');
 }
+
+
+// [DELETE] /admin/roles/delete/:id
+module.exports.delete = async (req, res) => {
+  const id = req.params.id;
+
+  await Role.updateOne({ _id: id }, {
+    deleted: true,
+    deletedAt: new Date()
+  });
+
+  req.flash('success', 'Xoá nhóm quyền thành công');
+  res.redirect('back');
+}
+
+// [GET] /admin/roles/detail/:id
+module.exports.detail = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = await Role.findById(id);
+
+    res.render('admin/pages/roles/detail', {
+      pageTitle: 'Chi tiết nhóm quyền',
+      role: data
+    });
+  } catch {
+    req.flash('error', 'Không tồn tại nhóm quyền này');
+    res.redirect(`${systemConfig.prefixAdmin}/roles`);
+  }
+}
