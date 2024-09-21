@@ -2,96 +2,100 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
 block main
-  +alert-error(3000)
+  if(role.permissions.includes('accounts_create'))
+    +alert-error(3000)
 
-  h1(class="mb-4") Thêm mới tài khoản
+    h1(class="mb-4") Thêm mới tài khoản
 
-  if(roles.length > 0)
-    form(
-      action=`${prefixAdmin}/accounts/create`
-      method="POST"
-      enctype="multipart/form-data"
-    )
-      div(class="form-group")
-      label(for="fullName") Họ tên *
-      input(
-        type="text"
-        class="form-control"
-        id="fullName"
-        name="fullName"
-        )
-      div(class="form-group mt-2")
-        label(for="email") Email *
-        input(
-          type="email"
-          class="form-control"
-          id="email"
-          name="email"
-        )
-      div(class="form-group mt-2")
-        label(for="password") Mật khẩu *
-        input(
-          type="password"
-          class="form-control"
-          id="password"
-          name="password"
-        )
-      div(class="form-group mt-2")
-        label(for="phone") Số điện thoại
+    if(roles.length > 0)
+      form(
+        action=`${prefixAdmin}/accounts/create`
+        method="POST"
+        enctype="multipart/form-data"
+      )
+        div(class="form-group")
+        label(for="fullName") Họ tên *
         input(
           type="text"
           class="form-control"
-          id="phone"
-          name="phone"
+          id="fullName"
+          name="fullName"
+          )
+        div(class="form-group mt-2")
+          label(for="email") Email *
+          input(
+            type="email"
+            class="form-control"
+            id="email"
+            name="email"
+          )
+        div(class="form-group mt-2")
+          label(for="password") Mật khẩu *
+          input(
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+          )
+        div(class="form-group mt-2")
+          label(for="phone") Số điện thoại
+          input(
+            type="text"
+            class="form-control"
+            id="phone"
+            name="phone"
+          )
+        div(
+          class="form-group mt-2"
+          upload-image
         )
-      div(
-        class="form-group mt-2"
-        upload-image
-      )
-        label(for="avatar") Avatar
-        input(
-          type="file"
-          class="form-control form-control-file"
-          id="avatar"
-          name="avatar"
-          accept="image/*"
-          upload-image-input
-        )
-        img(
-          src=""
-          class="image-preview"
-          upload-image-preview
-        )
-      div(class="form-group mt-2")
-        label(for="role_id") Phân quyền
-        select(name="role_id" id="role_id" class="form-control")
-          option(disabled) -- Chọn --
-          each role in roles
-            option(value=role.id) #{role.title}
-      div(class="form-group form-check form-check-inline")
-        input(
-          type="radio"
-          class="form-check-input"
-          id="statusActive"
-          name="status"
-          value="active"
-          checked
-        )
-        label(for="statusActive" class="form-check-label") Hoạt động
-      div(class="form-group form-check form-check-inline mt-2")
-        input(
-          type="radio"
-          class="form-check-input"
-          id="statusInActive"
-          name="status"
-          value="inactive"
-        )
-        label(for="statusInActive" class="form-check-label") Dừng hoạt động
-      div(class="form-group mt-2")
-        button(
-          type="submit"
-          class="btn btn-primary"
-        ) Tạo mới
+          label(for="avatar") Avatar
+          input(
+            type="file"
+            class="form-control form-control-file"
+            id="avatar"
+            name="avatar"
+            accept="image/*"
+            upload-image-input
+          )
+          img(
+            src=""
+            class="image-preview"
+            upload-image-preview
+          )
+        div(class="form-group mt-2")
+          label(for="role_id") Phân quyền
+          select(name="role_id" id="role_id" class="form-control")
+            option(disabled) -- Chọn --
+            each role in roles
+              option(value=role.id) #{role.title}
+        div(class="form-group form-check form-check-inline")
+          input(
+            type="radio"
+            class="form-check-input"
+            id="statusActive"
+            name="status"
+            value="active"
+            checked
+          )
+          label(for="statusActive" class="form-check-label") Hoạt động
+        div(class="form-group form-check form-check-inline mt-2")
+          input(
+            type="radio"
+            class="form-check-input"
+            id="statusInActive"
+            name="status"
+            value="inactive"
+          )
+          label(for="statusInActive" class="form-check-label") Dừng hoạt động
+        div(class="form-group mt-2")
+          button(
+            type="submit"
+            class="btn btn-primary"
+          ) Tạo mới
+    else
+      p(class="text-danger") Bạn cần tạo nhóm quyền trước khi tạo tài khoản
+      a(class="btn btn-warning" href=`${prefixAdmin}/roles/create/`) Tạo mới nhóm quyền
+
   else
-    p(class="text-danger") Bạn cần tạo nhóm quyền trước khi tạo tài khoản
-    a(class="btn btn-warning" href=`${prefixAdmin}/roles/create/`) Tạo mới nhóm quyền
+    h1(class="text-danger") Bạn không có quyền truy cập trang web này.

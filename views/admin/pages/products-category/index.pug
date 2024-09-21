@@ -10,52 +10,56 @@ block main
   +alert-error(3000)
   +alert-success(3000)
 
-  h1 Danh mục sản phẩm
-  .card.mb-3
-    .card-header Bộ lọc và Tìm kiếm
-    .card-body
-      .row
-        .col-6
-          +filterStatus(filterStatus)
+  if(role.permissions.includes('products-category_view'))
+    h1 Danh mục sản phẩm
+    .card.mb-3
+      .card-header Bộ lọc và Tìm kiếm
+      .card-body
+        .row
+          .col-6
+            +filterStatus(filterStatus)
 
-        .col-6
-          +search(keyword)
-          
-  .card.mb-3
-    .card-header Danh sách
-    .card-body
-      .row
-        .col-8
-          +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`)
-        .col-4 
-          a(
-            href=`${prefixAdmin}/products-category/create`
-            class="btn btn-outline-success"
-          ) + Thêm mới
+          .col-6
+            +search(keyword)
 
-      table(
-            class="table table-hover table-sm"
-            checkbox-multi
-      )
-        thead
-          tr
-            td
-              input(type="checkbox" name="checkall")
-            th STT
-            th Hình ảnh
-            th Tiêu đề
-            th Vị trí
-            th Trạng thái
-            th Hành động
+    .card.mb-3
+      .card-header Danh sách
+      .card-body
+        .row
+          .col-8
+            +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`)
+          .col-4
+            if(role.permissions.includes('products-category_create'))
+              a(
+                href=`${prefixAdmin}/products-category/create`
+                class="btn btn-outline-success"
+              ) + Thêm mới
 
-        tbody
-          +table-tree(documents)
-  form(
-    action=""
-    method="POST"
-    id="form-delete-category"
-    data-path=`${prefixAdmin}/products-category/delete`
-  )
+        table(
+              class="table table-hover table-sm"
+              checkbox-multi
+        )
+          thead
+            tr
+              td
+                input(type="checkbox" name="checkall")
+              th STT
+              th Hình ảnh
+              th Tiêu đề
+              th Vị trí
+              th Trạng thái
+              th Hành động
+
+          tbody
+            +table-tree(documents)
+    form(
+      action=""
+      method="POST"
+      id="form-delete-category"
+      data-path=`${prefixAdmin}/products-category/delete`
+    )
+  else
+    h1(class="text-danger") Bạn không có quyền truy cập trang web này.
 
   script(src="/admin/js/category.js")
   script(src="/admin/js/script.js") 

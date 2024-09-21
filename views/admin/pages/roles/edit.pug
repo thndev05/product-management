@@ -2,38 +2,42 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
 block main
-  h1(class="mb-4") Chỉnh sửa nhóm quyền
+  if(role.permissions.includes('roles_edit'))
 
-  +alert-success(3000)
-  +alert-error(3000)
+    h1(class="mb-4") Chỉnh sửa nhóm quyền
 
-  form(
-    action=`${prefixAdmin}/roles/edit/${data.id}?_method=PATCH`
-    method="POST"
-  )
-    div(class="form-group")
-      label(for="title") Tiêu đề
-      input(
-        type="text"
-        class="form-control"
-        id="title"
-        name="title"
-        required
-        value=data.title
-      )
-    div(class="form-group my-2")
-      label(for="desc") Mô tả
-      textarea(
-        type="text"
-        class="form-control textarea-mce"
-        id="desc"
-        name="description"
-      ) #{data.description}
-    div(class="form-group")
-      button(
-        type="submit"
-        class="btn btn-primary"
-      ) Cập nhật
+    +alert-success(3000)
+    +alert-error(3000)
+
+    form(
+      action=`${prefixAdmin}/roles/edit/${data.id}?_method=PATCH`
+      method="POST"
+    )
+      div(class="form-group")
+        label(for="title") Tiêu đề
+        input(
+          type="text"
+          class="form-control"
+          id="title"
+          name="title"
+          required
+          value=data.title
+        )
+      div(class="form-group my-2")
+        label(for="desc") Mô tả
+        textarea(
+          type="text"
+          class="form-control textarea-mce"
+          id="desc"
+          name="description"
+        ) #{data.description}
+      div(class="form-group")
+        button(
+          type="submit"
+          class="btn btn-primary"
+        ) Cập nhật
+  else
+    h1(class="text-danger") Bạn không có quyền truy cập trang web này.
   
   script(type="application/javascript" src="/tinymce/tinymce.min.js")
   script(type="application/javascript" src="/admin/js/tinymce.config.js")
