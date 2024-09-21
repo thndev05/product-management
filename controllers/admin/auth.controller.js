@@ -29,9 +29,6 @@ module.exports.loginPost = async (req, res) => {
     return res.redirect('back');
   }
 
-  console.log(md5(password));
-  console.log(user.password);
-
   if(md5(password) !== user.password) {
     req.flash('error', 'Sai mat khau');
     return res.redirect('back');
