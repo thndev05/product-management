@@ -1,3 +1,5 @@
+include ../mixins/moment.pug
+
 mixin table-tree(items, level = 0)
   each item, index in items
     - const prefix = Array(level + 1).join('--')
@@ -54,6 +56,14 @@ mixin table-tree(items, level = 0)
               href="#"
               class="badge bg-danger"
             ) Dừng hoạt động
+      td
+        p #{item.accountFullName}
+        +formatDateTime(item.createdBy.createdAt)
+      td
+        - const updateBy = item.updatedBy.slice(-1)[0];
+        if(updateBy)
+          p #{updateBy.accountFullName}
+          +formatDateTime(updateBy.updatedAt)
       td
         a(
           href=`${prefixAdmin}/products-category/detail/${item.id}`

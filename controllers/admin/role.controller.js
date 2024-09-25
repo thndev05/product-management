@@ -1,4 +1,5 @@
 const Role = require("../../models/role.model");
+const Account = require("../../models/account.model");
 const systemConfig = require('../../config/system');
 
 // [GET] /admin/roles
@@ -8,6 +9,21 @@ module.exports.index = async (req, res) => {
   };
 
   const documents = await Role.find(find);
+
+  for (const role of documents) {
+    // Created user
+    const createdUser = await Account.findOne({ _id: res.locals.user.id })
+    if(createdUser) {
+      role.accountFullName = createdUser.fullName;
+    }
+
+    // Updated user
+    const updatedBy = role.updatedBy.slice(-1)[0];
+    if(updatedBy) {
+      const updatedUser = await Account.findOne({ _id: updatedBy.account_id });
+      updatedBy.accountFullName = updatedUser.fullName;
+    }
+  }
 
   res.render('admin/pages/roles/index', {
     pageTitle: 'Nhóm quyền',
@@ -25,6 +41,11 @@ module.exports.create = async (req, res) => {
 // [POST] /admin/roles/create
 module.exports.createPost = async (req, res) => {
   const document = new Role(req.body);
+
+  req.body.createBy = {
+    account_id: res.locals.user.id
+  }
+
   await document.save();
   
   res.redirect(`${systemConfig.prefixAdmin}/roles`); 
@@ -53,7 +74,16 @@ module.exports.edit = async (req, res) => {
 module.exports.editPatch = async (req, res) => {
   try {
     const id = req.params.id;
-    await Role.updateOne({ _id: id }, req.body);
+
+    const updatedBy = {
+      account_id: res.locals.user.id,
+      updatedAt: new Date()
+    };
+
+    await Role.updateOne({ _id: id }, {
+      ...req.body,
+      $push: { updatedBy: updatedBy }
+    });
     
     req.flash('success', 'Cập nhật nhóm quyền thành công');
   } catch (error) {
@@ -97,7 +127,10 @@ module.exports.delete = async (req, res) => {
 
   await Role.updateOne({ _id: id }, {
     deleted: true,
-    deletedAt: new Date()
+    deletedBy: {
+      account_id: res.locals.user.id,
+      deletedAt: new Date()
+    }
   });
 
   req.flash('success', 'Xoá nhóm quyền thành công');

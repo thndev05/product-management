@@ -1,5 +1,6 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/moment.pug
 
 block main
   if(role.permissions.includes('roles_view'))
@@ -28,6 +29,8 @@ block main
               th STT
               th Nhóm quyền
               th Mô tả ngắn
+              th Người tạo
+              th Người cập nhật
               th Hành động
 
           tbody
@@ -37,6 +40,14 @@ block main
                   td #{index + 1}
                   td #{item.title}
                   td !{item.description}
+                  td
+                    p #{item.accountFullName}
+                    +formatDateTime(item.createdBy.createdAt)
+                  td
+                    - const updatedBy = item.updatedBy.slice(-1)[0];
+                    if(updatedBy)
+                      p #{updatedBy.accountFullName}
+                      +formatDateTime(updatedBy.updatedAt)
                   td
                     a(
                       class="btn btn-secondary btn-sm"

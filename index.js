@@ -10,7 +10,7 @@ const methodOverride = require('method-override');
 const flash = require('express-flash');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-
+const moment = require('moment');
 
 // Connect database
 database.connect();
@@ -37,6 +37,7 @@ app.use(flash());
 
 // App locals variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
+app.locals.moment = moment;
 
 // Public folder
 app.use(express.static(`${__dirname}/public`));
