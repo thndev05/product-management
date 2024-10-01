@@ -202,6 +202,15 @@ module.exports.create = async (req, res) => {
 
 // [POST] /admin/products/create
 module.exports.createPost = async (req, res) => {
+  // fix phan quyen
+
+  // const permissions = res.locals.role.permissions;
+  // if(permissions.includes('products_create')) {
+  //
+  // } else {
+  //   return;
+  // }
+
   req.body.price = parseInt(req.body.price);
   req.body.discountPercentage = parseFloat(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
