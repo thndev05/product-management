@@ -9,11 +9,21 @@ module.exports.index = async (req, res) => {
     status: 'active'
   }
 
+  // san pham noi bat
   const featuredProducts = await Product.find(find).limit(6);
-  const newProducts = ProductHelpers.priceNewProducts(featuredProducts);
+  const newfeaturedProducts = ProductHelpers.priceNewProducts(featuredProducts);
+
+  // san pham moi nhat
+  const latestProducts = await Product.find({
+    deleted: false,
+    status: 'active'
+  }).sort({ position: 'desc' }).limit(6);
+  const newlatestProducts = ProductHelpers.priceNewProducts(latestProducts);
+
 
   res.render('client/pages/home/index', {
     pageTitle: 'Trang chủ',
-    featuredProducts: newProducts
+    featuredProducts: newfeaturedProducts,
+    latestProducts: newlatestProducts
   });
 }
